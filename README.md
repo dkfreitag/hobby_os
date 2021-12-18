@@ -6,7 +6,7 @@ This repository contains source files for a hobby x86 operating system written i
 
 With the exception of the Makefile, all code in this repository was taken from a tutorial linked below. Next steps: rewrite the tutorial code and add keyboard support.
 
---
+---
 
 To build the operating system, run:
 
@@ -20,7 +20,7 @@ To clean up the mess:
 
 `make clean`
 
---
+---
 
 **Source tutorial:**
 
@@ -42,6 +42,3 @@ brew install xorriso
 **Install GRUB 2 - instructions here for OS X installation:**
 
 https://wiki.osdev.org/GRUB
-
---
-
