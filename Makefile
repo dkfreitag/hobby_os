@@ -28,9 +28,9 @@ myos.iso: grub.cfg myos.bin
 .PHONY: clean run
 
 run: build
-	qemu-system-x86_64 -cdrom myos.iso
+	qemu-system-i386 -cdrom myos.iso
 
 clean:
-	rm -rf *.o *.bin isodir
+	rm -rf *.o *.bin *.iso isodir
 	
 
