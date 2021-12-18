@@ -1,5 +1,7 @@
 ## Hobby Operating System Project
 
+2021-12-17
+
 This repository contains source files for a hobby x86 operating system written in C that boots with GRUB 2 Multiboot.
 
 With the exception of the Makefile, all code in this repository was taken from a tutorial linked below. Next steps: rewrite the tutorial code and add keyboard support.
