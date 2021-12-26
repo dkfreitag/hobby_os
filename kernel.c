@@ -1,7 +1,11 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
- 
+
+#define KBSTATP         0x64    // kbd controller status port(I)
+#define KBS_DIB         0x01    // kbd data in buffer
+#define KBDATAP         0x60    // kbd data port(I)
+
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)
 #error "You are not using a cross-compiler, you will most certainly run into trouble"
@@ -103,12 +107,50 @@ void terminal_writestring(const char* data)
 {
 	terminal_write(data, strlen(data));
 }
- 
+
+
+static inline unsigned char inb(unsigned short port)
+{
+  unsigned char data;
+
+  asm volatile("in %1,%0" : "=a" (data) : "d" (port));
+  return data;
+}
+
+static inline void outb(unsigned short port, unsigned char data)
+{
+  asm volatile("out %0,%1" : : "a" (data), "d" (port));
+}
+
+
+int kbdgetc(void) {
+	unsigned int data;
+
+	/* poll keyboard status */
+	char keyboard_status = inb(KBSTATP);
+	
+	/* if there is not data in the buffer return -1 */
+	if((keyboard_status & KBS_DIB) == 0)
+		return -1;
+	/* if we didn't return -1, then get the data from the keyboard port */
+	data = inb(KBDATAP);
+	return data;
+}
+
+
 void kernel_main(void) 
 {
 	/* Initialize terminal interface */
 	terminal_initialize();
  
 	/* Newline support is left as an exercise. */
-	terminal_writestring("Hello, kernel World!");
+	terminal_writestring("Hello, kernel World! ");
+	
+	/* start infinite loop polling for keystrokes */
+	for (;;) {
+		int kbd_data = kbdgetc();
+		if (kbd_data != -1)
+			if (kbd_data == 0x04)
+				terminal_writestring("3 pressed. ");
+	}
 }
